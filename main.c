@@ -31,7 +31,9 @@ enum NumeroDeBoton
 {
     NotWorking = 0, Working = 1
 };
-
+//uint8_t decodeButton;
+uint8_t botones[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152, 176,
+                      48, 24, 122, 16, 56, 90, 66, 74, 82 };
 //prototypes
 void initHw();
 
@@ -80,12 +82,10 @@ int main(void)
             char *str = getFieldString(&data, 1);
             valid = true;
         }
-        if (isCommand(&data, "SENDB", 1))
+        if (isCommand(&data, "sendb", 1))
         {
             putsUart0("\nButton: ");
-            uint8_t botones[] =
-                    { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152, 176,
-                      48, 24, 122, 16, 56, 90, 66, 74, 82 };
+
             uint8_t buttonNumber = getFieldInteger(&data, 1);
             putiUart0(buttonNumber);
             putsUart0(" was sent.\n");
@@ -95,8 +95,12 @@ int main(void)
             valid = true;
 
         }
-        if (isCommand(&data, "PLAY", 0))
+        if (isCommand(&data, "decode", 0))
         {
+            isDecode(true);
+            valid = true;
+        }
+        if(isCommand(&data, "learn", 1)){
 
         }
         if (!valid)

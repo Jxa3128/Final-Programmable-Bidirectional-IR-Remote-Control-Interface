@@ -10,7 +10,8 @@
 #include "tm4c123gh6pm.h"
 
 bool eSom;
-
+uint8_t decodeButton = 0;
+bool decode = false;
 uint8_t testIndex;
 bool bufferIR[MAX_SAMPLES - INIT_SAMPLES];
 
@@ -126,7 +127,7 @@ void timerInterrupt1()
         GPIO_PORTB_ICR_R |= IR_RX_MASK;         // clear interrupt
         GPIO_PORTB_IM_R |= IR_RX_MASK;    // turn falling edge interrupt back on
         eSom = false;
-        SomRuim();
+        //SomRuim();
         return;
     }
 }
@@ -287,13 +288,54 @@ void parseBuffer()
     if (!checkError())
     {
         uint8_t button = getButton();
+//        decodeButton = button;
         if (button < 253)
         {
+            uint8_t bns[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152,
+                              176, 48, 24, 122, 16, 56, 90, 66, 74, 82 };
             putsUart0("Button ");
             putiUart0(button);
             eSom = true;
             //good sound
             BomSom();
+            //if decode is selected from main
+            if (decode)
+            {
+                uint8_t iterator;
+                uint8_t tempAdd[8], tempData[8];
+                putsUart0("\nAddress: ");
+                for (iterator = 8; iterator > 0; iterator--)
+                {
+                    tempAdd[8 - iterator] = (1 << (iterator - 1)) & 0;
+                    if (tempAdd[8 - iterator])
+                    {
+                        putcUart0('1');
+                    }
+                    else
+                    {
+                        putcUart0('0');
+                    }
+                }
+                putcUart0('\n');
+                putsUart0("Data: ");
+
+                //it is getting the correct buttin address
+                //putiUart0(bns[button - 1]);
+                for (iterator = 8; iterator > 0; iterator--)
+                {
+                    tempData[8 - iterator] = (1 << (iterator - 1))
+                            & bns[button - 1];
+                    if (tempData[8 - iterator])
+                    {
+                        putcUart0('1');
+                    }
+                    else
+                    {
+                        putcUart0('0');
+                    }
+                }
+                putcUart0('\n');
+            }
         }
         else
         {
@@ -309,3 +351,11 @@ void parseBuffer()
     }
 }
 
+uint8_t getBtn(uint8_t _btn)
+{
+    return _btn;
+}
+void isDecode(bool d)
+{
+    decode = d;
+}

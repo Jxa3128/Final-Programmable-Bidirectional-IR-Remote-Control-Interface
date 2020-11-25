@@ -19,7 +19,7 @@
 #define MAX_SAMPLES 102             // total number of samples that we need
 #define INIT_SAMPLES 6              // size of the first 6 samples
 
-
+//static uint8_t decodeButton;
 
 void settimerInterrupt0(uint32_t );
 void settimerInterrupt1(uint32_t);
@@ -33,5 +33,6 @@ void parseBuffer(void);
 void fallingEdge(void);
 uint8_t BinarytoDecimal(uint8_t []);
 void initIR_RX(void);
-
+uint8_t getBtn(uint8_t _btn);
+void isDecode(bool d);
 #endif
