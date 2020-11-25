@@ -17,6 +17,6 @@ void playSound();
 void BomSom();
 void SomRuim();
 void playAlert_Good();
-void playAlert_Bad();
+void playAlert_Bad(uint16_t hz, uint16_t d);
 
 #endif

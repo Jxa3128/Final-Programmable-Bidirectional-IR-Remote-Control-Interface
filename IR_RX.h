@@ -19,6 +19,7 @@
 #define MAX_SAMPLES 102             // total number of samples that we need
 #define INIT_SAMPLES 6              // size of the first 6 samples
 
+
 //static uint8_t decodeButton;
 
 void settimerInterrupt0(uint32_t );

@@ -26,6 +26,7 @@
 #include <string.h>
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
+#include "eeprom.h"
 
 enum NumeroDeBoton
 {
@@ -35,6 +36,7 @@ enum NumeroDeBoton
 uint8_t botones[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152, 176,
                       48, 24, 122, 16, 56, 90, 66, 74, 82 };
 //prototypes
+void printHelp();
 void initHw();
 
 //main
@@ -48,6 +50,8 @@ int main(void)
     initIR_TX();
     setUart0BaudRate(115200, 40e6);
     USER_DATA data;
+    putsUart0(
+            "\n\tWelcome to the final project -- type help for information.\n");
     while (true)
     {
         //GET THE DATA from user
@@ -68,8 +72,8 @@ int main(void)
          }
 
          */
-//first initialize valid to false
-//then if it goes to an if -> set to true
+        //first initialize valid to false
+        //then if it goes to an if -> set to true
         bool valid = false;
         if (isCommand(&data, "set", 2))
         {
@@ -85,29 +89,63 @@ int main(void)
         if (isCommand(&data, "sendb", 1))
         {
             putsUart0("\nButton: ");
-
             uint8_t buttonNumber = getFieldInteger(&data, 1);
-            putiUart0(buttonNumber);
+            ATOI(buttonNumber);
             putsUart0(" was sent.\n");
-            //uint8_t it = 0;
             playComment(0, botones[buttonNumber - 1]);
-            //playComment(0, 162);
             valid = true;
 
         }
         if (isCommand(&data, "decode", 0))
         {
             isDecode(true);
+
+            if (isCommand(&data, "decode", 1))
+            {
+                char *off = getFieldString(&data, 1);
+                if (myCompare(off, "off"))
+                {
+                    isDecode(false);
+                }
+            }
             valid = true;
         }
-        if(isCommand(&data, "learn", 1)){
+        if (isCommand(&data, "learn", 3))
+        {
+            //ex: learn plusBtn 0 162
+            char *name = getFieldString(&data, 1);
+            uint8_t address = getFieldInteger(&data, 2);
+            uint8_t data = getFieldInteger(&data, 3);
+            addInstruction(name, address, data);
+            valid = true;
+        }
+        if (isCommand(&data, "info", 1))
+        {
+            valid = true;
+        }
+        if (isCommand(&data, "erase", 1))
+        {
 
+            valid = true;
+        }
+        if (isCommand(&data, "play", 1))
+        {
+            valid = true;
+        }
+        if (isCommand(&data, "clear", 0))
+        {
+            clearEeprom();
+            valid = true;
+        }
+        if (isCommand(&data, "help", 0))
+        {
+            printHelp();
+            valid = true;
         }
         if (!valid)
         {
             putsUart0("Invalid command\n");
         }
-
     }
 }
 
@@ -119,4 +157,12 @@ void initHw()
             | SYSCTL_RCC_USESYSDIV | (4 << SYSCTL_RCC_SYSDIV_S);
     _delay_cycles(3);
 
+}
+void printHelp()
+{
+    putsUart0(" Welcome to Embedded Systems I.\n");
+    putsUart0(" The options are shown below: \n");
+    putsUart0(" decode: shows you the address and data of pushed remote.\n");
+    putsUart0(
+            " learn: learns the name of a button and save its data and address.\n");
 }

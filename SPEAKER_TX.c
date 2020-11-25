@@ -84,28 +84,41 @@ void playAlert_Good()
     GPIO_PORTE_DEN_R &= ~speakerTX_MASK;
     waitMicrosecond(1e5);
 }
-void playAlert_Bad()
+void playAlert_Bad(uint16_t hz, uint16_t d)
 {
-
+    uint16_t val = (40000000 / 2) / hz;
+    PWM1_1_LOAD_R = val;
+    PWM1_1_CMPB_R = (val / 2);
     GPIO_PORTE_DEN_R |= speakerTX_MASK;
-    waitMicrosecond(1e5);
-    PWM1_1_LOAD_R = 10000;
-    GPIO_PORTE_DEN_R |= speakerTX_MASK;
-    waitMicrosecond(1e5);
+    waitMicrosecond(d * 1000);
     GPIO_PORTE_DEN_R &= ~speakerTX_MASK;
-    waitMicrosecond(1e5);
+
+//    GPIO_PORTE_DEN_R |= speakerTX_MASK;
+//    waitMicrosecond(1e5);
+//    PWM1_1_LOAD_R = 10000;
+//    GPIO_PORTE_DEN_R |= speakerTX_MASK;
+//    waitMicrosecond(1e5);
+//    GPIO_PORTE_DEN_R &= ~speakerTX_MASK;
+//    waitMicrosecond(1e5);
+
 }
 void BomSom()
 {
 
     PWM1_1_LOAD_R = 8000; //(clk freq/2)/desired freq
-
     playAlert_Good();
 
 }
 void SomRuim()
 {
-    PWM1_1_LOAD_R = 7000; //(clk freq/2)/desired freq
-    playAlert_Bad();
+    //PWM1_1_LOAD_R = 7000; //(clk freq/2)/desired freq
+    uint16_t bf[] = { 31365, 1760 };
+    uint16_t bd[] = { 100, 100 };
+    uint8_t i;
+    for (i = 0; i < 2; i++)
+    {
+        playAlert_Bad(bf[i], bd[i]);
+    }
+
 }
 

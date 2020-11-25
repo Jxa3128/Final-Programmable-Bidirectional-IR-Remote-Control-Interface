@@ -9,6 +9,7 @@
 #include <string.h>
 #include "tm4c123gh6pm.h"
 
+//if 0 bad, if 1 good
 bool eSom;
 uint8_t decodeButton = 0;
 bool decode = false;
@@ -259,6 +260,7 @@ uint8_t getButton()
             if (bToI(data) == buttons[i])
                 return i + 1;
         }
+
         return 255;     //invalid button
     }
     else
@@ -339,7 +341,11 @@ void parseBuffer()
         }
         else
         {
-            SomRuim();
+            //if bad sound
+            if (eSom == 0)
+            {
+                SomRuim();
+            }
             if (button == 255)
                 putsUart0("Invalid Button.");
             if (button == 254)
@@ -348,6 +354,13 @@ void parseBuffer()
                 putsUart0("Error.");
         }
         putcUart0('\n');
+    }
+    else
+    {
+        if (eSom == 0)
+        {
+            SomRuim();
+        }
     }
 }
 

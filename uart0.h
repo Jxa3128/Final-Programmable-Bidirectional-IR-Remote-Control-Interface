@@ -45,4 +45,5 @@ bool isCommand(USER_DATA* data, const char strCommand[], uint8_t minArguments);
 bool stringCompare(char* a, char* b);
 bool kbhitUart0();
 bool myCompare(char * str1, char * str2);
+void ATOI(uint8_t num);
 #endif

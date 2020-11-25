@@ -145,7 +145,7 @@ void parseFields(USER_DATA *data)
         else
         {
             if ((test >= '0' && test <= '9'))
-            { //Optionally || test == '-' || test == '.'
+            {
                 if (delimiter && data->fieldCount < 5)
                 {
                     delimiter = false;
@@ -199,7 +199,7 @@ bool isCommand(USER_DATA *data, const char strCommand[], uint8_t minArguments)
 {
     if (data->fieldCount >= minArguments + 1)
     {
-        if (stringCompare(data->buffer, strCommand))
+        if (myCompare(data->buffer, strCommand))
         {
             return true;
         }
@@ -241,4 +241,29 @@ bool stringCompare(char *a, char *b)
 bool kbhitUart0()
 {
     return !(UART0_FR_R & UART_FR_RXFE);
+}
+
+void ATOI(uint8_t num)
+{
+    uint8_t countValue = num;
+    uint8_t digits = 0;
+    while (countValue > 0)
+    {
+        countValue /= 10;
+        digits++;
+    }
+    if (digits == 0)
+    {
+        putcUart0('0');
+    }
+    else
+    {
+        char ans[4] = "\0\0\0\0";
+        for (digits = digits; digits > 0; digits--)
+        {
+            ans[digits - 1] = (num % 10) + '0';
+            num /= 10;
+        }
+        putsUart0(ans);
+    }
 }
