@@ -48,6 +48,7 @@ int main(void)
     initIR_RX();
     initUart0();
     initIR_TX();
+    initEeprom();
     setUart0BaudRate(115200, 40e6);
     USER_DATA data;
     putsUart0(
@@ -115,12 +116,14 @@ int main(void)
             //ex: learn plusBtn 0 162
             char *name = getFieldString(&data, 1);
             uint8_t address = getFieldInteger(&data, 2);
-            uint8_t data = getFieldInteger(&data, 3);
-            addInstruction(name, address, data);
+            uint8_t dat = getFieldInteger(&data, 3);
+            addInstruction(name, address, dat);
             valid = true;
         }
         if (isCommand(&data, "info", 1))
         {
+            uint16_t position = getFieldInteger(&data, 1);
+            infoIndex(position);
             valid = true;
         }
         if (isCommand(&data, "erase", 1))
@@ -160,9 +163,15 @@ void initHw()
 }
 void printHelp()
 {
-    putsUart0(" Welcome to Embedded Systems I.\n");
-    putsUart0(" The options are shown below: \n");
-    putsUart0(" decode: shows you the address and data of pushed remote.\n");
+    putsUart0("\t\r\nWelcome to Embedded Systems I.\r\n");
+    putsUart0("\tThe options are shown below: \n");
+    putsUart0("\tdecode: shows you the address and data of pushed remote.\n");
     putsUart0(
-            " learn: learns the name of a button and save its data and address.\n");
+            "\tlearn: learns the name of a button and save its data and address.\n");
+    putsUart0("\tinfo: prints out the saved names with its address and data.\n");
+    putsUart0("\terase: erases the name with its data and address.\n");
+    putsUart0("\tclear: clears the eeprom.\n");
+    putsUart0("\tplay: plays the command that is currently saved in the eeprom.\n");
+    putsUart0("\thelp: shows the commands again.\r\n");
+
 }
