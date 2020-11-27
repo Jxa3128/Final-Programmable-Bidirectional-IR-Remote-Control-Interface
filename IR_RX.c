@@ -295,7 +295,7 @@ void parseBuffer()
         {
             uint8_t bns[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152,
                               176, 48, 24, 122, 16, 56, 90, 66, 74, 82 };
-            putsUart0("Button ");
+            putsUart0("\nButton ");
             putiUart0(button);
             eSom = true;
             //good sound
