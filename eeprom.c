@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 // Subroutines
 //-----------------------------------------------------------------------------
+uint8_t currentStatus;
 
 void initEeprom()
 {
@@ -65,7 +66,6 @@ void addInstruction(char *name, uint8_t address, uint8_t data)
     }
     //tryna put in the last position in that block
     tempArray[(STRSIZE / 4) + 1 - 1] = (address << 8) | data;
-
 
     for (i = 0; i < (STRSIZE / 4) + 1; i++)
     {
@@ -148,4 +148,73 @@ void printDectoBin(uint8_t x)
 //{
 //
 //}
+//this is when the user says info NAME
+void infoName(char *name)
+{
+    // first it is ideal that we get the index of said name
+    currentStatus = notFound;
+    uint8_t currentIndex = findIndex(name);
+    if (currentStatus == Found)
+    {
+        infoIndex(currentIndex);
+    }
+    else if (currentStatus == notFound)
+    {
+        putsUart0("The index was not located.\n");
+    }
+    else
+    {
+        putsUart0("Error!\n");
+    }
 
+}
+uint32_t findIndex(char *name)
+{
+    //this is the current size
+    uint32_t sz = readEeprom(0);
+    uint16_t position = 0;
+
+    //iterate through the eeprom size *think phat array*
+    for (position = 0; position < sz; position++)
+    {
+        //the st -> start
+        //start is a variable that is changing through
+        //each iteration
+        int16_t st = (position * ((STRSIZE / 4) + 1)) + 1;
+        uint8_t it = 0;
+        //init tempArr
+        uint32_t tempArr[(STRSIZE / 4) + 1];
+        //clear tempArr
+        for (it = 0; it < (STRSIZE / 4) + 1; it++)
+        {
+            tempArr[it] = 0;
+        }
+        bool isMatching = true;
+        //start reading from the eeprom
+        //and start putting them in each position
+        //question (STRSIZE / 4) + 1
+        for (it = 0; it < 4; it++)
+        {
+            tempArr[it] = readEeprom(st + it);
+        }
+        //iteratgye through the string size you implemented
+        for (it = 0; it < STRSIZE; it++)
+        {
+            if ((tempArr[it / 4] << ((it % 4)) * 8) >> 3 * 8 != name[it])
+            {
+                //they are not the same
+                isMatching = false;
+            }
+            if (name[it] == '\0')
+                break;
+        }
+        if (isMatching == 1)
+        {
+            currentStatus = Found;
+            return position;
+        }
+
+    }
+    currentStatus = Found;
+    return notFound;
+}

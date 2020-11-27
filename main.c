@@ -122,9 +122,22 @@ int main(void)
         }
         if (isCommand(&data, "info", 1))
         {
-            uint16_t position = getFieldInteger(&data, 1);
-            infoIndex(position);
-            valid = true;
+            //if they type something like info 0
+            if (data.fieldType[1] == 'N')
+            {
+                uint16_t position = getFieldInteger(&data, 1);
+                infoIndex(position);
+                valid = true;
+            }
+            //if user types something like info NAME
+            if (data.fieldType[1] == 'A')
+            {
+                char *nombre = getFieldString(&data, 1);
+                infoName(nombre);
+                valid = true;
+            }
+            //not a number or an alpha
+            valid = false;
         }
         if (isCommand(&data, "erase", 1))
         {
@@ -155,7 +168,7 @@ int main(void)
 // Initialize Hardware
 void initHw()
 {
-    // Configure HW to work with 16 MHz XTAL, PLL enabled, system clock of 40 MHz
+// Configure HW to work with 16 MHz XTAL, PLL enabled, system clock of 40 MHz
     SYSCTL_RCC_R = SYSCTL_RCC_XTAL_16MHZ | SYSCTL_RCC_OSCSRC_MAIN
             | SYSCTL_RCC_USESYSDIV | (4 << SYSCTL_RCC_SYSDIV_S);
     _delay_cycles(3);
@@ -168,10 +181,12 @@ void printHelp()
     putsUart0("\tdecode: shows you the address and data of pushed remote.\n");
     putsUart0(
             "\tlearn: learns the name of a button and save its data and address.\n");
-    putsUart0("\tinfo: prints out the saved names with its address and data.\n");
+    putsUart0(
+            "\tinfo: prints out the saved names with its address and data.\n");
     putsUart0("\terase: erases the name with its data and address.\n");
     putsUart0("\tclear: clears the eeprom.\n");
-    putsUart0("\tplay: plays the command that is currently saved in the eeprom.\n");
+    putsUart0(
+            "\tplay: plays the command that is currently saved in the eeprom.\n");
     putsUart0("\thelp: shows the commands again.\r\n");
 
 }
