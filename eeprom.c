@@ -235,7 +235,7 @@ void eraseName(char *name)
         {
             writeEeprom(st + it, 0);
         }
-        sz = sz -1;
+        sz = sz - 1;
         writeEeprom(0, sz);
         putsUart0("The command: ");
         putsUart0(name);
@@ -248,5 +248,40 @@ void eraseName(char *name)
     else
     {
         putsUart0("Error!\n");
+    }
+}
+void listCommands()
+{
+    uint32_t sz, position, st, i = 0, tempArr[(STRSIZE / 4) + 1];
+    char nombre[STRSIZE];
+    sz = readEeprom(0);
+    for (position = 0; position < sz; position = position + 1)
+    {
+        st = (position * (STRSIZE / 4) + 1) + 1;
+
+        //clear the temp array
+        for (i = 0; i < (STRSIZE / 4) + 1; ++i)
+        {
+            tempArr[i] = 0;
+        }
+        for (i = 0; i < (STRSIZE / 4) + 1; i++)
+        {
+            tempArr[i] = readEeprom(st + i);
+        }
+        for (i = 0; i < STRSIZE; i++)
+        {
+            nombre[i] = (tempArr[i / 4] << ((i % 4)) * 8) >> 3 * 8;
+
+        }
+        putsUart0("\n\t");
+        putsUart0(nombre);
+        uint8_t _address = (tempArr[(STRSIZE / 4)] << 16) >> 24;
+        uint8_t _data = (tempArr[(STRSIZE / 4)] << 24) >> 24;
+        putsUart0("\tAddress is: ");
+        printDectoBin(_address);
+        putsUart0("\t");
+        putsUart0("Data is: ");
+        printDectoBin(_data);
+
     }
 }

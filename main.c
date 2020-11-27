@@ -56,8 +56,9 @@ int main(void)
     while (true)
     {
         //GET THE DATA from user
+        putsUart0("\n>> ");
         getsUart0(&data);
-        //putsUart0("\n");
+        putsUart0("\n");
         //parse the data
         parseFields(&data);
 
@@ -82,6 +83,7 @@ int main(void)
             int32_t data_i = getFieldInteger(&data, 2);
             valid = true;
         }
+        //alert good on or alert good off
         if (isCommand(&data, "alert", 1))
         {
             uint8_t i = 0;
@@ -122,14 +124,24 @@ int main(void)
             }
             valid = true;
         }
-        if (isCommand(&data, "learn", 3))
+        //min has to have one argument
+        if (isCommand(&data, "learn", 1))
         {
-            //ex: learn plusBtn 0 162
-            char *name = getFieldString(&data, 1);
-            uint8_t address = getFieldInteger(&data, 2);
-            uint8_t dat = getFieldInteger(&data, 3);
-            addInstruction(name, address, dat);
-            valid = true;
+            //if ex: learn NAME 0 162
+            if (isCommand(&data, "learn", 3))
+            {
+                //ex: learn plusBtn 0 162
+                char *name = getFieldString(&data, 1);
+                uint8_t address = getFieldInteger(&data, 2);
+                uint8_t dat = getFieldInteger(&data, 3);
+                addInstruction(name, address, dat);
+                valid = true;
+            }
+            //if ex: learn NAME
+            else
+            {
+
+            }
         }
         if (isCommand(&data, "info", 1))
         {
@@ -150,9 +162,17 @@ int main(void)
                 valid = true;
             }
         }
+        if (isCommand(&data, "list", 1))
+        {
+
+            putsUart0("Printing the commands: \r\n");
+            listCommands();
+            valid = true;
+
+        }
         if (isCommand(&data, "erase", 1))
         {
-            char * name = getFieldString(&data, 1);
+            char *name = getFieldString(&data, 1);
             eraseName(name);
             valid = true;
         }
