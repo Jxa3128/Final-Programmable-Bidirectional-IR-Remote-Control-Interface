@@ -90,6 +90,7 @@ void initIR_TX()
     GPIO_PORTB_DEN_R &= ~GPO_PWM_MASK;
 }
 
+
 void playComment(uint8_t address, uint8_t data)
 {
     uint8_t addressArray[8], dataArray[8];
