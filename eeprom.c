@@ -160,7 +160,7 @@ void infoName(char *name)
     }
     else if (currentStatus == notFound)
     {
-        putsUart0("The index was not located.\n");
+        putsUart0("The name was not located.\n");
     }
     else
     {
@@ -216,7 +216,7 @@ uint32_t findIndex(char *name)
         }
 
     }
-    currentStatus = Found;
+    currentStatus = notFound;
     return notFound;
 }
 void eraseName(char *name)

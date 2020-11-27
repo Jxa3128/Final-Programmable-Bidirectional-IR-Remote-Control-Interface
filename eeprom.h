@@ -12,7 +12,7 @@
 
 enum STATUS
 {
-    Error = -1, Found = 1, notFound = 0
+    Error = -1, Found = 1, notFound = 255
 };
 
 void initEeprom();
