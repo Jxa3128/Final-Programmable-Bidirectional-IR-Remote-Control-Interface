@@ -354,6 +354,7 @@ void parseBuffer()
                 putsUart0("Error.");
         }
         putcUart0('\n');
+
     }
     else
     {
