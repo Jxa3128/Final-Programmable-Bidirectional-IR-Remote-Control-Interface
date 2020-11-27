@@ -152,7 +152,8 @@ int main(void)
         }
         if (isCommand(&data, "erase", 1))
         {
-
+            char * name = getFieldString(&data, 1);
+            eraseName(name);
             valid = true;
         }
         if (isCommand(&data, "play", 1))

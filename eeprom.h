@@ -24,6 +24,7 @@ void testCommand();
 void printDectoBin(uint8_t x);
 uint32_t findIndex(char * name);
 void infoName(char * );
+void eraseName(char *);
 //void findInstruction(char *, uint8_t, uint8_t);
 
 #endif /* EEPROM_H_ */

@@ -219,3 +219,7 @@ uint32_t findIndex(char *name)
     currentStatus = Found;
     return notFound;
 }
+void eraseName(char *name)
+{
+
+}
