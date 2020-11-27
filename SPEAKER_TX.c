@@ -101,6 +101,7 @@ void playAlert_Bad(uint16_t hz, uint16_t d)
 //    GPIO_PORTE_DEN_R &= ~speakerTX_MASK;
 //    waitMicrosecond(1e5);
 
+
 }
 void BomSom()
 {
