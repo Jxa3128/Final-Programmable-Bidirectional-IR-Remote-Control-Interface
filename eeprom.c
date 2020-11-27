@@ -219,7 +219,34 @@ uint32_t findIndex(char *name)
     currentStatus = notFound;
     return notFound;
 }
+//this function now deletes the command
+//by finding the location
+//and rewriting to the eeprom
 void eraseName(char *name)
 {
-
+    currentStatus = notFound;
+    uint8_t currentIndex = findIndex(name);
+    if (currentStatus == Found)
+    {
+        uint32_t sz, st, it;
+        sz = readEeprom(0);
+        st = (currentIndex * ((STRSIZE / 4) + 1)) + 1;
+        for (it = 0; it < (STRSIZE / 4) + 1; it++)
+        {
+            writeEeprom(st + it, 0);
+        }
+        sz = sz -1;
+        writeEeprom(0, sz);
+        putsUart0("The command: ");
+        putsUart0(name);
+        putsUart0(" has been removed.\n");
+    }
+    else if (currentStatus == notFound)
+    {
+        putsUart0("The name was not located.\n");
+    }
+    else
+    {
+        putsUart0("Error!\n");
+    }
 }
