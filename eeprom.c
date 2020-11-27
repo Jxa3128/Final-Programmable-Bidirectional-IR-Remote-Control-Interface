@@ -170,6 +170,7 @@ void infoName(char *name)
 }
 uint32_t findIndex(char *name)
 {
+
     //this is the current size
     uint32_t sz = readEeprom(0);
     uint16_t position = 0;

@@ -125,6 +125,7 @@ int main(void)
             //if they type something like info 0
             if (data.fieldType[1] == 'N')
             {
+                putsUart0("info: Integer\n");
                 uint16_t position = getFieldInteger(&data, 1);
                 infoIndex(position);
                 valid = true;
@@ -132,12 +133,11 @@ int main(void)
             //if user types something like info NAME
             if (data.fieldType[1] == 'A')
             {
+                putsUart0("info: String\n");
                 char *nombre = getFieldString(&data, 1);
                 infoName(nombre);
                 valid = true;
             }
-            //not a number or an alpha
-            valid = false;
         }
         if (isCommand(&data, "erase", 1))
         {
