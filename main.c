@@ -84,7 +84,18 @@ int main(void)
         }
         if (isCommand(&data, "alert", 1))
         {
-            char *str = getFieldString(&data, 1);
+            uint8_t i = 0;
+            char *_status = getFieldString(&data, 3);
+            if (myCompare(_status, "on"))
+            {
+                for (i = 0; i < 3; i++)
+                    BomSom();
+            }
+            else
+            {
+                for (i = 0; i < 5; i++)
+                    SomRuim();
+            }
             valid = true;
         }
         if (isCommand(&data, "sendb", 1))
