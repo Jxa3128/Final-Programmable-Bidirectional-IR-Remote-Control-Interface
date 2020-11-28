@@ -32,9 +32,16 @@ enum NumeroDeBoton
 {
     NotWorking = 0, Working = 1
 };
+#define BTNSIZE 21
 //uint8_t decodeButton;
 uint8_t botones[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152, 176,
                       48, 24, 122, 16, 56, 90, 66, 74, 82 };
+//
+//uint64_t btn_names[7][3] = { { "CH-", "CH", "CH+" }, { "PREV", "NEXT",
+//                                                       "PLAY/PAUSE" },
+//                             { "VOL-", "VOL+", "EQ" }, { "0", "100+", "200+" },
+//                             { "1", "2", "3" }, { "4", "5", "6" }, { "7", "8",
+//                                                                     "9" } };
 //prototypes
 void printHelp();
 void initHw();
@@ -190,6 +197,25 @@ int main(void)
             printHelp();
             valid = true;
         }
+        /*
+         if (isCommand(&data, "buttons", 0))
+         {
+         uint8_t i = 0, j = 0;
+         putsUart0("The buttons are the following: \n");
+         for (i = 0; i < 7; i++)
+         {
+         for (j = 0; j < 3; j++)
+         {
+
+         putsUart0(btn_names[i]);
+         if (i % 3 == 0)
+         putcUart0('\n');
+         }
+         }
+
+         valid = true;
+         }
+         */
         if (!valid)
         {
             putsUart0("Invalid command\n");

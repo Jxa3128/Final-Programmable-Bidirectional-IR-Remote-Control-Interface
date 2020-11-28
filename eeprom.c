@@ -182,6 +182,7 @@ uint32_t findIndex(char *name)
         //start is a variable that is changing through
         //each iteration
         int16_t st = (position * ((STRSIZE / 4) + 1)) + 1;
+
         uint8_t it = 0;
         //init tempArr
         uint32_t tempArr[(STRSIZE / 4) + 1];
@@ -252,18 +253,24 @@ void eraseName(char *name)
 }
 void listCommands()
 {
-    uint32_t sz, position, st, i = 0, tempArr[(STRSIZE / 4) + 1];
+    uint32_t sz;
+    uint8_t position = 0;
+    uint16_t st;
+    uint8_t i = 0;
+    uint32_t tempArr[(STRSIZE / 4) + 1];
     char nombre[STRSIZE];
     sz = readEeprom(0);
     for (position = 0; position < sz; position = position + 1)
     {
-        st = (position * (STRSIZE / 4) + 1) + 1;
+        st = (position * ((STRSIZE / 4) + 1)) + 1;
 
         //clear the temp array
-        for (i = 0; i < (STRSIZE / 4) + 1; ++i)
+        for (i = 0; i < (STRSIZE / 4) + 1; i++)
         {
             tempArr[i] = 0;
         }
+        //this tempArr holds the extraction of the name
+
         for (i = 0; i < (STRSIZE / 4) + 1; i++)
         {
             tempArr[i] = readEeprom(st + i);
