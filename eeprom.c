@@ -76,7 +76,11 @@ void addInstruction(char *name, uint8_t address, uint8_t data)
 }
 void testCommand()
 {
-
+    uint8_t i = 0;
+    for (; i < (STRSIZE / 4) + 1; ++i)
+    {
+        putcUart0(readEeprom(i));
+    }
 }
 //infoC
 //this finds the command at that index (position)
@@ -229,9 +233,16 @@ void eraseName(char *name)
     uint8_t currentIndex = findIndex(name);
     if (currentStatus == Found)
     {
-        uint32_t sz, st, it;
+        uint32_t sz;
+        uint16_t st;
+        uint8_t it = 0;
+        //read the size
         sz = readEeprom(0);
+        //find the start position using the index of
+        //that name using the function
         st = (currentIndex * ((STRSIZE / 4) + 1)) + 1;
+
+        //iterate and find -> writeEeprom();
         for (it = 0; it < (STRSIZE / 4) + 1; it++)
         {
             writeEeprom(st + it, 0);

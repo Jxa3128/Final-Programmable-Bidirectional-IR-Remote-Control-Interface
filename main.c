@@ -119,6 +119,7 @@ int main(void)
         }
         if (isCommand(&data, "decode", 0))
         {
+            putsUart0("Decode mode is on.\n");
             isDecode(true);
 
             if (isCommand(&data, "decode", 1))
@@ -126,6 +127,7 @@ int main(void)
                 char *off = getFieldString(&data, 1);
                 if (myCompare(off, "off"))
                 {
+                    putsUart0("Decode mode is off.\n");
                     isDecode(false);
                 }
             }
@@ -216,6 +218,12 @@ int main(void)
          valid = true;
          }
          */
+        if (isCommand(&data, "test", 0))
+        {
+            putsUart0("Testing...\n");
+            testCommand();
+            valid = true;
+        }
         if (!valid)
         {
             putsUart0("Invalid command\n");
