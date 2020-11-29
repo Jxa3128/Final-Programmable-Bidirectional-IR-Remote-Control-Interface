@@ -49,7 +49,7 @@ void clearEeprom()
 void addInstruction(char *name, uint8_t address, uint8_t data)
 {
     //current size of how many things are saved
-    uint16_t currentSize = readEeprom(0);
+    uint32_t currentSize = readEeprom(0);
     uint8_t i;
     uint32_t tempArray[(STRSIZE / 4) + 1];
     uint16_t st = (currentSize * ((STRSIZE / 4) + 1)) + 1;
@@ -227,6 +227,9 @@ uint32_t findIndex(char *name)
 //this function now deletes the command
 //by finding the location
 //and rewriting to the eeprom
+//this function now deletes the command
+//by finding the location
+//and rewriting to the eeprom
 void eraseName(char *name)
 {
     currentStatus = notFound;
@@ -247,8 +250,6 @@ void eraseName(char *name)
         {
             writeEeprom(st + it, 0);
         }
-        sz = sz - 1;
-        writeEeprom(0, sz);
         putsUart0("The command: ");
         putsUart0(name);
         putsUart0(" has been removed.\n");
@@ -291,15 +292,90 @@ void listCommands()
             nombre[i] = (tempArr[i / 4] << ((i % 4)) * 8) >> 3 * 8;
 
         }
-        putsUart0("\n\t");
-        putsUart0(nombre);
-        uint8_t _address = (tempArr[(STRSIZE / 4)] << 16) >> 24;
-        uint8_t _data = (tempArr[(STRSIZE / 4)] << 24) >> 24;
-        putsUart0("\tAddress is: ");
-        printDectoBin(_address);
-        putsUart0("\t");
-        putsUart0("Data is: ");
-        printDectoBin(_data);
+        if (nombre[0] != '\0')
+        {
+            putsUart0("\n\t");
+            putsUart0(nombre);
+            uint8_t _address = (tempArr[(STRSIZE / 4)] << 16) >> 24;
+            uint8_t _data = (tempArr[(STRSIZE / 4)] << 24) >> 24;
+            putsUart0("\tAddress is: ");
+            printDectoBin(_address);
+            putsUart0("\t");
+            putsUart0("Data is: ");
+            printDectoBin(_data);
+        }
 
     }
 }
+/*
+ *void eraseName(char *name)
+ {
+ currentStatus = notFound;
+ uint8_t currentIndex = findIndex(name);
+ if (currentStatus == Found)
+ {
+ uint32_t tempArr[(STRSIZE / 4) + 1] = { 0, 0, 0, 0 };
+ uint32_t sz;
+ uint16_t st,newSt;
+ uint8_t it = 0;
+ uint16_t position = 0;
+
+ //read the size
+ sz = readEeprom(0);
+ //find the start position using the index of
+ //that name using the function
+ st = (currentIndex * ((STRSIZE / 4) + 1)) + 1;
+ //read the eeprom into a temp array
+ for (it = 0; it < (STRSIZE / 4) + 1; it++)
+ {
+ tempArr[it] = readEeprom(st + it);
+ }
+ for (position = 0; position < sz; position++)
+ {
+ newSt = (position * ((STRSIZE / 4) + 1)) + 1;
+ for (it = 0; it < (STRSIZE / 4) + 1; it++)
+ {
+ if ((tempArr[it / 4] << ((it % 4)) * 8) >> 3 * 8 == name[it])
+ {
+ tempArr[it] = 0; //try to delete it?
+ }
+ else
+ {
+ tempArr[it] = readEeprom(newSt + it);
+ }
+
+ }
+ }
+ for (it = 0; it < (STRSIZE / 4) + 1; it++)
+ {
+ if ((tempArr[it / 4] << ((it % 4)) * 8) >> 3 * 8 != 0)
+ writeEeprom(it + st, tempArr[it]);
+ }
+ //bool isValid = tempArr[4] >> 31;
+ putsUart0("\nis Valid is: ");
+ //putcUart0(isValid);
+ //iterate and find -> writeEeprom();
+ for (it = 0; it < (STRSIZE / 4) + 1; it++)
+ {
+ writeEeprom(st + it, 0);
+ }
+ sz = sz - 1;
+ writeEeprom(0, sz);
+ putsUart0("The command: ");
+ putsUart0(name);
+ putsUart0(" has been removed.\n");
+ }
+ else if (currentStatus == notFound)
+ {
+ putsUart0("The name was not located.\n");
+ }
+ else
+ {
+ putsUart0("Error!\n");
+ }
+ }
+ *
+ *
+ *
+ */
+
