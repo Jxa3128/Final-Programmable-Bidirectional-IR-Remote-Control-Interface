@@ -187,7 +187,16 @@ int main(void)
         }
         if (isCommand(&data, "play", 1))
         {
+            char * name = getFieldString(&data, 1);
+            uint16_t info = getInfo(name);
+            uint8_t _address = info >> 8;
+            uint8_t _data = ((info << 8) >> 8);
+            putsUart0("The command: ");
+            putsUart0(name);
+            putsUart0(" was played.\n");
+            playComment(_address, _data);
             valid = true;
+
         }
         if (isCommand(&data, "clear", 0))
         {

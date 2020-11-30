@@ -28,4 +28,5 @@ void eraseName(char *);
 //void findInstruction(char *, uint8_t, uint8_t);
 void infoIndex(uint16_t index);
 void listCommands();
+uint16_t getInfo(char * name);
 #endif /* EEPROM_H_ */
