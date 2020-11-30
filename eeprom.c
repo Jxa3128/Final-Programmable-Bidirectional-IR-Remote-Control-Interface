@@ -311,9 +311,9 @@ uint16_t getInfo(char * name){
     uint8_t pos,st;
     uint32_t tempLength;
     pos = findIndex(name);
-    st = (pos * ((STRSIZE/4) + 1));
-    tempLength = readEeprom(st + (STRSIZE));
-    return ((tempLength << 16) >> 16);
+    st = (pos * 4);
+    tempLength = readEeprom(st + 4);
+    return ((tempLength << STRSIZE) >> STRSIZE);
 
 }
 /*
