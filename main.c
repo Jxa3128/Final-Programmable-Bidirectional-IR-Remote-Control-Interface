@@ -127,7 +127,7 @@ int main(void)
                 char *off = getFieldString(&data, 1);
                 if (myCompare(off, "off"))
                 {
-                    putsUart0("Decode mode is off.\n");
+                    //putsUart0("Decode mode is off.\n");
                     isDecode(false);
                 }
             }
