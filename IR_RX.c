@@ -9,6 +9,7 @@
 #include <string.h>
 #include "tm4c123gh6pm.h"
 
+
 //if 0 bad, if 1 good
 bool eSom;
 uint8_t decodeButton = 0;
@@ -287,9 +288,15 @@ void parseBuffer()
     }
     //putcUart0('\n');
 
-    if (!checkError())
+    if (!checkError() || 1)
     {
+
         uint8_t button = getButton();
+        uint8_t realData = bToI(data);
+        returnData(0, realData);
+        putsUart0("Data is: ");
+        ATOI(realData);
+        putcUart0('\n');
 //        decodeButton = button;
         if (button < 253)
         {
@@ -297,6 +304,7 @@ void parseBuffer()
                               176, 48, 24, 122, 16, 56, 90, 66, 74, 82 };
             putsUart0("\nButton ");
             putiUart0(button);
+
             eSom = true;
             //good sound
             BomSom();

@@ -33,6 +33,7 @@ enum NumeroDeBoton
     NotWorking = 0, Working = 1
 };
 #define BTNSIZE 21
+char globalName[STRSIZE];
 //uint8_t decodeButton;
 uint8_t botones[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152, 176,
                       48, 24, 122, 16, 56, 90, 66, 74, 82 };
@@ -45,6 +46,9 @@ uint8_t botones[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152, 176,
 //prototypes
 void printHelp();
 void initHw();
+void returnData(uint8_t _address, uint8_t _data);
+bool waiting = false;
+
 
 //main
 int main(void)
@@ -119,7 +123,7 @@ int main(void)
         }
         if (isCommand(&data, "decode", 0))
         {
-            putsUart0("Decode mode is on.\n");
+            //putsUart0("Decode mode is on.\n");
             isDecode(true);
 
             if (isCommand(&data, "decode", 1))
@@ -149,7 +153,16 @@ int main(void)
             //if ex: learn NAME
             else
             {
+                waiting = true;
+                char *localName = getFieldString(&data, 1);
+                uint8_t i;
+                for (i = 0; i < 5; i++)
+                {
+                    globalName[i] = localName[i];
+                }
 
+                while (waiting);
+                valid = true;
             }
         }
         if (isCommand(&data, "info", 1))
@@ -187,7 +200,7 @@ int main(void)
         }
         if (isCommand(&data, "play", 1))
         {
-            char * name = getFieldString(&data, 1);
+            char *name = getFieldString(&data, 1);
             uint16_t info = getInfo(name);
             uint8_t _address = info >> 8;
             uint8_t _data = ((info << 8) >> 8);
@@ -264,4 +277,15 @@ void printHelp()
             "\tplay: plays the command that is currently saved in the eeprom.\n");
     putsUart0("\thelp: shows the commands again.\r\n");
 
+}
+void returnData(uint8_t _address, uint8_t _data)
+{
+    if (waiting)
+    {
+        addInstruction(globalName, _address, _data);
+        waiting = false;
+    } else
+    {
+        putsUart0("\nreturnData was called, but learn has not.\n");
+    }
 }
