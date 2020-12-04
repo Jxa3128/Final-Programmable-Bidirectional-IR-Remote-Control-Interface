@@ -277,6 +277,8 @@ void printHelp()
     putsUart0(
             "\tplay: plays the command that is currently saved in the eeprom.\n");
     putsUart0("\thelp: shows the commands again.\r\n");
+    putsUart0("\talert good on/off.\r\n");
+
 
 }
 void returnData(uint8_t _address, uint8_t _data)
