@@ -37,4 +37,5 @@ uint8_t BinarytoDecimal(uint8_t []);
 void initIR_RX(void);
 uint8_t getBtn(uint8_t _btn);
 void isDecode(bool d);
+void learning(bool);
 #endif

@@ -153,6 +153,7 @@ int main(void)
             //if ex: learn NAME
             else
             {
+                learning(true);
                 waiting = true;
                 char *localName = getFieldString(&data, 1);
                 uint8_t i;
@@ -286,6 +287,6 @@ void returnData(uint8_t _address, uint8_t _data)
         waiting = false;
     } else
     {
-        putsUart0("\nreturnData was called, but learn has not.\n");
+        //putsUart0("\nreturnData was called, but learn has not.\n");
     }
 }

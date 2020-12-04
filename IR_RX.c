@@ -9,14 +9,13 @@
 #include <string.h>
 #include "tm4c123gh6pm.h"
 
-
 //if 0 bad, if 1 good
 bool eSom;
 uint8_t decodeButton = 0;
 bool decode = false;
 uint8_t testIndex;
 bool bufferIR[MAX_SAMPLES - INIT_SAMPLES];
-
+bool isLearning = false;
 uint8_t sampleNum = 0;
 uint8_t addr[8];
 uint8_t data[8];
@@ -294,17 +293,25 @@ void parseBuffer()
         uint8_t button = getButton();
         uint8_t realData = bToI(data);
         returnData(0, realData);
-        putsUart0("Data is: ");
-        ATOI(realData);
-        putcUart0('\n');
+        //putsUart0("Data is: ");
+        //ATOI(realData);
+        //putcUart0('\n');
 //        decodeButton = button;
         if (button < 253)
         {
             uint8_t bns[] = { 162, 98, 226, 34, 2, 194, 224, 168, 144, 104, 152,
                               176, 48, 24, 122, 16, 56, 90, 66, 74, 82 };
-            putsUart0("\nButton ");
-            putiUart0(button);
-
+            if (isLearning)
+            {
+                putsUart0("\nCommand Saved.\n");
+                //putiUart0(button);
+                isLearning = false;
+            }
+            else
+            {
+                putsUart0("\nButton ");
+                putiUart0(button);
+            }
             eSom = true;
             //good sound
             BomSom();
@@ -380,4 +387,8 @@ uint8_t getBtn(uint8_t _btn)
 void isDecode(bool d)
 {
     decode = d;
+}
+void learning(bool l)
+{
+    isLearning = l;
 }
