@@ -157,7 +157,7 @@ int main(void)
                 waiting = true;
                 char *localName = getFieldString(&data, 1);
                 uint8_t i;
-                for (i = 0; i < 5; i++)
+                for (i = 0; i < STRSIZE; i++)
                 {
                     globalName[i] = localName[i];
                 }
